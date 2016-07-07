@@ -1,20 +1,28 @@
 "use strict";
 let Dao = require('./Dao');
-class UserDao extends Dao{
-    constructor(name,login_id,login_pwd,md5_key){
-        this.name = name;
-        this.login_id = login_id;
-        this.login_pwd = login_pwd;
-        this.md5_key = md5_key;
+class UserDao extends Dao {
+    constructor(obj) {
+        obj = obj || {};
+        super(obj);
+        this.uid = obj.uid;
+        this.name = obj.name;
+        this.login_id = obj.login_id;
+        this.login_pwd = obj.login_pwd;
+        this.md5_key = obj.md5_key;
     }
-    get sql(){
+
+    get sql() {
         return {
-            insert:'insert into user_info (name,login_id,login_pwd,md5_key)values(?,?,?,?)',
-            insertArray:[this.name,this.login_id,this.login_pwd,this.md5_key],
-            update:'update user_info set name = ?, login_id = ?,login_pwd = ?,md5_key = ?,modify_time = now() where uid = ?',
-            'delete':'delete from user_info where uid = ?',
-            queryById:'select * from user_info where uid = ?',
-            queryAll:'select * from user_info'
+            insert: 'insert into user_info (name,login_id,login_pwd,md5_key)values(?,?,?,?)',
+            insertParam: [this.name, this.login_id, this.login_pwd, this.md5_key],
+            update: 'update user_info set name = ?, login_id = ?,login_pwd = ?,md5_key = ?,modify_time = now() where uid = ?',
+            updateParam:[this.name,this.login_id,this.login_pwd,this.md5_key,this.uid],
+            'delete': 'delete from user_info where uid = ?',
+            deleteParam:[this.uid],
+            queryById: 'select * from user_info where uid = ?',
+            queryByIdParam:[this.uid],
+            queryAll: 'select * from user_info limit ?,?',
+            queryAllParam:[+this.page * this.size,+this.size]
         };
     }
 }
