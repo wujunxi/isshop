@@ -6,10 +6,11 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var loginFilter = require('./filter/login-filter');
-var routes = require('./routes/index');
-var login = require('./routes/login');
-var users = require('./routes/users');
+var loginFilter = require('./filter/login-filter'),
+    routes = require('./routes/index'),
+    login = require('./routes/login'),
+    logout = require('./routes/logout'),
+    users = require('./routes/users');
 
 var app = express();
 
@@ -17,7 +18,7 @@ var app = express();
 app.use(session({
     key: 'sessionID',
     secret: 'isshop',
-    cookie:{maxAge:1000*60*30}, // 30 minutes
+    cookie: {maxAge: 1000 * 60 * 30}, // 30 minutes
     resave: true,
     saveUninitialized: false
 }));
@@ -34,8 +35,10 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../frontend/public')));
 
+// routes
 app.use('/', routes);
 app.use('/login', login);
+app.use('/logout', logout);
 app.use('/users', loginFilter, users);
 
 // catch 404 and forward to error handler
@@ -68,6 +71,5 @@ app.use(function (err, req, res, next) {
         error: {}
     });
 });
-
 
 module.exports = app;

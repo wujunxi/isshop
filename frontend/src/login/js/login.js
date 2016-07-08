@@ -14,6 +14,11 @@ require(['jquery'],function($){
                 }
             });
         });
+        $("#btnLogout").click(function(){
+            $.get('/logout',function(result){
+                console.log(result);
+            });
+        });
         $("#btnQuery").click(function(){
             $.ajax({
                 url:'/users/get',
