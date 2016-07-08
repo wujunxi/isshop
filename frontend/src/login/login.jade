@@ -1,12 +1,28 @@
 extends ../template/base
 block title
-    title 登录--天付宝
+    title 登录
 
 block links
-    link(href='/login/css/index.css',rel='stylesheet',type='text/css')
+    link(href='/login/css/login.css',rel='stylesheet',type='text/css')
 
 block content
     include ../includes/header
+    .content
+        h3 登录
+        label 账户
+        input#tbID(type='text',placeholder='请输入账户')
+        label 密码
+        input#tbPwd(type='password',placeholder='请输入密码')
+        button#btnLogin 登录
+        br/
+        h3 用户信息查询
+        label 用户编码
+        input#tbUid(type='text')
+        label 用户名
+        input#tbName(type='text')
+        label 登录账户
+        input#tbLoginID(type='text')
+        button#btnQuery 查询
 
-block append scripts
-    script(type='text/javascript',src='login/js/index.js')
+block scripts
+    script(type='text/javascript',src='/scripts/lib/require.min.js',data-main='/login/js/login.js')

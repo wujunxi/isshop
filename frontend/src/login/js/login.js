@@ -1,0 +1,36 @@
+require(['jquery'],function($){
+    $(function(){
+        $("#btnLogin").click(function(){
+            $.ajax({
+                url:'/login',
+                data:{
+                    login_id:$("#tbID").val(),
+                    login_pwd:$("#tbPwd").val()
+                },
+                dataType:'json',
+                type:"post",
+                success:function(result){
+                    console.log(result);
+                }
+            });
+        });
+        $("#btnQuery").click(function(){
+            $.ajax({
+                url:'/users/get',
+                data:{
+                    uid:$("#tbUid").val(),
+                    login_id:$("#tbLoginID").val(),
+                    name:$("#tbName").val()
+                },
+                dataType:'json',
+                type:"get",
+                success:function(result){
+                    console.log(result);
+                    if(result.code == "00"){
+                        console.table(result.data.list);
+                    }
+                }
+            });
+        });
+    });
+});

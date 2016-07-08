@@ -17,7 +17,9 @@ router.post('/', function (req, res, next) {
     }
     userDao.checkLogin(function (userObj) {
         if(userObj){
-            helper.success({uid:userObj.uid,name:userObj.name});
+            var obj = {uid:userObj.uid,name:userObj.name};
+            req.session.user = obj;
+            helper.success(obj);
         }else{
             helper.error('0003');
         }

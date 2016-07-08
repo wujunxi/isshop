@@ -8,7 +8,7 @@ var Helper = require("../util/HttpHelper");
 router.all('*',function(req,res,next){
     var helper = new Helper(req,res,next);
     // 检查是否有uid，没有则认为是非法登录
-    if(req.session.uid && req.session.uid != ""){
+    if(req.session.user && req.session.user.uid && req.session.user.uid != ""){
         next();
     }else{
         helper.error("0004");
