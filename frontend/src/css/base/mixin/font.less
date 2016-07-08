@@ -1,0 +1,9 @@
+@import "../var/global.less";
+
+// 字体大小
+.fs(@size:@gFontSize) when(ispixel(@size)){
+  font-size:@size;
+}
+.fs(@size:12) when(isnumber(@size)){
+  font-size:@size * 1px;
+}

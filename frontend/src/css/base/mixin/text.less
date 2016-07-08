@@ -1,0 +1,44 @@
+// 截断字符串，超出的用省略号表示
+.ellipsis(@w:auto) {
+    width: @w;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: normal;
+}
+
+.ellipsisLn(@line) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: @line;
+}
+
+// 强制字符串不换行
+.text-wrap() {
+    word-wrap:break-word;
+    word-break:break-all;
+}
+
+// 文本对齐
+.ta-c(){
+  text-align:center;
+}
+
+.ta-l(){
+  text-align:left;
+}
+
+.ta-r(){
+  text-align:right;
+}
+
+// 行高
+.lh(@v) when(isnumber(@v)){
+  line-height:@v * 1px;
+}
+
+.lh(@v) when(ispixel(@v)){
+  line-height:@v;
+}

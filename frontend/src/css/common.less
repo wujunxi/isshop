@@ -1,0 +1,73 @@
+@import "base/fn.less";
+
+.ocx_style {
+  width: 180px;
+  height: 30px;
+  line-height: 30px;
+  text-align: left;
+  margin-left: 10px;
+  border: none;
+  background: none;
+  color: #898989;
+}
+
+// 默认链接样式
+.link(@color:#3499D9) {
+  &, &:hover {
+    color: @color;
+  }
+}
+
+.link {
+  &, &-gray, &-white, &-orange {
+    font-size: 12px;
+    text-decoration: none;
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  & {
+    .link();
+  }
+  &-gray {
+    .link(@gTextColor);
+  }
+  &-white {
+    .link(#fff);
+  }
+  &-orange {
+    .link(@gOrangeColor);
+  }
+}
+
+// 加粗
+.b {
+  font-weight: bold;
+}
+
+// 数字
+.num {
+  font-family: @gNumberFont;
+}
+
+// 边
+.bt {
+  .bt(solid 1px @gBorderColor);
+}
+
+.br {
+  .br(solid 1px @gBorderColor);
+}
+
+.bb {
+  .bb(solid 1px @gBorderColor);
+}
+
+.bl {
+  .bl(solid 1px @gBorderColor);
+}
+
+//
+.mt-list(60);
+.ml-list(60);

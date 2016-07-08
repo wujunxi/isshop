@@ -1,0 +1,165 @@
+@import "../var/global.less";
+
+// display
+.dp-i(){
+  display: inline;
+}
+.dp-b(){
+  display: block;
+}
+.dp-ib(){
+  display: inline-block;
+}
+
+// float
+.fl(){
+  float:left;
+}
+.fr(){
+  float:right;
+}
+
+// border
+.b(@v){
+  border:@v;
+}
+.bt(@v){
+  border-top:@v;
+}
+.br(@v){
+  border-right:@v;
+}
+.bb(@v){
+  border-bottom:@v;
+}
+.bl(@v){
+  border-left:@v;
+}
+
+// margin
+.m(@v) when (default()){
+  margin:@v;
+}
+.m(@v) when (isnumber(@v)){
+  margin:@v * 1px;
+}
+.m(@v) when (ispixel(@v)){
+  margin:@v;
+}
+.mt(@v) when (isnumber(@v)){
+  margin-top:@v * 1px;
+}
+.mt(@v) when (ispixel(@v)){
+  margin-top:@v;
+}
+.mr(@v) when (isnumber(@v)){
+  margin-right:@v * 1px;
+}
+.mr(@v) when (ispixel(@v)){
+  margin-right:@v;
+}
+.mb(@v) when (isnumber(@v)){
+  margin-bottom:@v * 1px;
+}
+.mb(@v) when (ispixel(@v)){
+  margin-bottom:@v;
+}
+.ml(@v) when (isnumber(@v)){
+  margin-left:@v * 1px;
+}
+.ml(@v) when (ispixel(@v)){
+  margin-left:@v;
+}
+// loop
+.mt-list(@v) when (isnumber(@v)) and (@v > 0){
+  .mt-list((@v - 1));
+  .mt-@{v}{
+    margin-top:@v * 1px;
+  }
+}
+.mr-list(@v) when (isnumber(@v)) and (@v > 0){
+  .mr-list((@v - 1));
+  .mr-@{v}{
+    margin-right:@v * 1px;
+  }
+}
+.mb-list(@v) when (isnumber(@v)) and (@v > 0){
+  .mb-list((@v - 1));
+  .mb-@{v}{
+    margin-bottom:@v * 1px;
+  }
+}
+.ml-list(@v) when (isnumber(@v)) and (@v > 0){
+  .ml-list((@v - 1));
+  .ml-@{v}{
+    margin-left:@v * 1px;
+  }
+}
+
+
+// padding
+.p(@v) when (default()){
+  padding:@v;
+}
+.p(@v) when (ispixel(@v)){
+  padding:@v;
+}
+.p(@v) when (isnumber(@v)){
+  padding:@v * 1px;
+}
+.pt(@v) when (ispixel(@v)){
+  padding-top:@v;
+}
+.pt(@v) when(isnumber(@v)){
+  padding-top:@v * 1px;
+}
+.pr(@v) when (ispixel(@v)){
+  padding-right:@v;
+}
+.pr(@v) when(isnumber(@v)){
+  padding-right:@v * 1px;
+}
+.pb(@v) when (ispixel(@v)){
+  padding-bottom:@v;
+}
+.pb(@v) when(isnumber(@v)){
+  padding-bottom:@v * 1px;
+}
+.pl(@v) when (ispixel(@v)){
+  padding-left:@v;
+}
+.pl(@v) when(isnumber(@v)){
+  padding-left:@v * 1px;
+}
+
+// width
+.w(){
+  width:100%;
+}
+.w(@v) when (isnumber(@v)){
+  width:@v * 1px;
+}
+.w(@v) when (ispixel(@v)),(ispercentage(@v)){
+  width:@v;
+}
+
+// height
+.h(){
+  height:100%;
+}
+.h(@v) when (isnumber(@v)){
+  height:@v * 1px;
+}
+.h(@v) when (ispixel(@v)),(ispercentage(@v)){
+  height:@v;
+}
+
+// color
+.c(@v) when(iscolor(@v)){
+  color:@v;
+}
+
+// background
+.bg(@v){
+  background:@v;
+}

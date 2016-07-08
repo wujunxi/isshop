@@ -1,0 +1,22 @@
+1. 搭建express + mysql，实现增删查改
+2. 搭建 jade + gulp
+3. 增加 redis，session控制
+4. 完善前后端通讯协议
+5. 动画效果实现
+6. ngix部署
+7. 模块实现，登陆、注册
+9. 模块实现，自定义商品
+10. 模块实现，订单生成
+11. 模块实现，管理后台
+12. 模块实现，数据统计，报表生成
+13. 模块实现，配置管理商品
+14. 模块实现，支付
+
+45days
+base dev - 25d
+fix bug - 10d
+modify feature - 5d
+deploy environment - 5d
+
+
+to-do use correct METHOD post/get

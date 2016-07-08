@@ -1,0 +1,29 @@
+//- Created by wujx on 2016/7/8.
+doctype
+html
+    head
+        meta(http-equiv='Content-Type',content='text/html;charset=utf-8')
+        meta(http-equiv='X-UA-Compatible',content='IE=Edge')
+        //-标题
+        block title
+            title Individual Solution Shop
+        link(rel='icon',href='/favicon.ico',type='image/x-icon')
+        //- 样式块
+        block links
+            link(href='/css/common.css',rel='stylesheet',type='text/css')
+    body
+        //- 主体内容块
+        block content
+        //- 尾部块
+        block footer
+            include ../includes/footer
+        //- 脚本块
+        block scripts
+            script(type='text/javascript',src='/js/lib/require.min.js')
+            script(type='text/javascript').
+                require.config({
+                    baseUrl: '/js/lib',
+                    paths: {
+                        jquery: 'jquery-1.8.0.min'
+                    }
+                });
