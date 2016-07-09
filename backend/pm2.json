@@ -3,9 +3,7 @@
     "NODE_ENV": "test"
   },
   "script": "bin/www",
-  "log_file": "/var/log/isshop.log",
-  "error_file": "/var/log/isshop-err.log",
-  "out_file": "/var/log/isshop-out.log",
+  "log_file": "/var/log/isshop/isshop.log",
   "merge_logs": true,
   "log_date_format": "YYYY-MM-DD HH:mm Z"
 }
