@@ -16,8 +16,8 @@ mysql.test = {
     //debug:['ComQueryPacket', 'RowDataPacket'],
     debug: ['ComQueryPacket'],
     host: '127.0.0.1',
-    user: 'wujx',
-    password: 'Wujunxi123!',
+    user: 'isshop_oper',
+    password: 'Isshop_oper123',
     database: 'isshop_db',
     port: 3306
 };

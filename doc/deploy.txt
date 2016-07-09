@@ -1,0 +1,42 @@
+部署文档
+
+1.克隆项目到本地
+git clone https://github.com/wujunxi/isshop.git
+
+2.修改数据库配置 conf.js
+
+3.创建数据库
+create database isshop_db;
+
+4.执行sql目录下的数据库脚本
+source xxx
+
+3.新增数据库操作用户
+create user isshop_oper@localhost identified by 'Isshop_oper123';
+grant select,insert,delete,update on isshop_db.* to 'isshop_oper'@localhost;
+
+3.修改 nginx 配置
+
+4.进入项目 backend 文件夹，安装依赖
+npm install
+
+5.进入项目 backend 文件夹，编译前端文件
+gulp
+
+6.启动程序
+
+
+注意：
+* 启动数据库
+sudo service mysqld start
+* 关闭数据库
+sudo service mysqld stop
+* 查看数据库状态
+sudo service mysqld status
+* 如果未安装 nodejs
+curl --silent --location https://rpm.nodesource.com/setup_6.x | bash -
+yum -y install nodejs
+* 如果未安装编译工具
+yum install gcc-c++ make
+* 如果未安装gulp
+npm install -g gulp

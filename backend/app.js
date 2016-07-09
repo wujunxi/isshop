@@ -19,7 +19,11 @@ var Dao = require('./dao/Dao');
 var app = express();
 
 
-// get environment variable, set NODE_ENV='test'
+// get environment variable
+// windows : set NODE_ENV=test
+//           echo %NODE_ENV%
+// linux : export NODE_ENV=test
+//         echo $NODE_ENV
 var env = app.get('env');
 console.log('current environment is ' + env);
 if(env === 'development'){
