@@ -5,6 +5,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var mysql = require('mysql');
 
 var loginFilter = require('./filter/login-filter'),
     routes = require('./routes/index'),
@@ -12,16 +13,28 @@ var loginFilter = require('./filter/login-filter'),
     logout = require('./routes/logout'),
     users = require('./routes/users');
 
+var $conf = require('./conf');
+var Dao = require('./dao/Dao');
+
 var app = express();
 
+
+// get environment variable, set NODE_ENV='test'
+var env = app.get('env');
+console.log('current environment is ' + env);
+if(env === 'development'){
+    $conf.env ='dev';
+}else if(env == 'test'){
+    $conf.env = 'test';
+}else{
+    $conf.env = 'pro';
+}
+
+// create connect pool
+Dao.pool = mysql.createPool(Object.assign({}, $conf.mysql));
+
 // session
-app.use(session({
-    key: 'sessionID',
-    secret: 'isshop',
-    cookie: {maxAge: 1000 * 60 * 30}, // 30 minutes
-    resave: true,
-    saveUninitialized: false
-}));
+app.use(session($conf.session));
 
 // view engine setup
 app.set('views', path.join(__dirname, '../frontend/views'));
@@ -52,7 +65,7 @@ app.use(function (req, res, next) {
 
 // development error handler
 // will print stacktrace
-if (app.get('env') === 'development') {
+if (env === 'development') {
     app.use(function (err, req, res, next) {
         res.status(err.status || 500);
         res.render('error', {

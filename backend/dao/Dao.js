@@ -1,16 +1,17 @@
 "use strict";
-let mysql = require('mysql');
-let $conf = require('../conf/db');
-
 // 连接池
-let pool = mysql.createPool(Object.assign({}, $conf.mysql));
+let _pool;
 
 class Dao {
     constructor(obj) {
         obj = obj || {};
         this.page = obj.page || 0;
         this.size = obj.size || 10;
-        this.pool = pool;
+        this.pool = _pool;
+    }
+
+    static set pool(v){
+        _pool = v;
     }
 
     insert(cb) {
