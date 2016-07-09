@@ -23,8 +23,10 @@ npm install
 5.进入项目 backend 文件夹，编译前端文件
 gulp
 
-6.启动程序
-
+6.启动程序，注意设置对应的环境变量 product，development，test
+export NODE_ENV=product && pm2 start bin/www
+查看是否启动成功
+pm2 l
 
 注意：
 * 启动数据库
@@ -40,3 +42,5 @@ yum -y install nodejs
 yum install gcc-c++ make
 * 如果未安装gulp
 npm install -g gulp
+* 如果未安装pm2
+npm install -g pm2
