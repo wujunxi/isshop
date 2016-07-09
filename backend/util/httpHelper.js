@@ -20,15 +20,15 @@ class HttpHelper {
         this.next = next;
     }
 
-    checkParam(opt, cb) {
+    checkQuery(opt, cb) {
         let param;
         for (let k in opt) {
             param = this.req.query[k];
             if (typeof(param) == "undefined" || param == "") {
-                this.error("0001", k);
+                this.error("0001");
                 return;
             } else if (!opt[k].test(param)) {
-                this.error("0002", k);
+                this.error("0002");
                 return;
             }
         }
@@ -37,14 +37,10 @@ class HttpHelper {
         }
     }
 
-    error(code, attach) {
+    error(code, msg) {
         code = code || "0000";
-        attach = attach || "";
-        var msg = ERROR_MSG[code];
-        if (typeof(msg) == "undefined") {
-            msg = "";
-        }
-        this.res.json({code: code, msg: msg + attach});
+        msg =  msg || ERROR_MSG[code] || "";
+        this.res.json({code: code, msg: msg});
     }
 
     success(obj) {
