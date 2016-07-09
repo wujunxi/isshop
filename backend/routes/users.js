@@ -24,7 +24,7 @@ router.get('/getAll', function (req, res, next) {
 //GET 根据ID查询 /users/getById?uid=xxx
 router.get('/getById', function (req, res, next) {
     var helper = new HttpHelper(req, res, next);
-    helper.checkParam({
+    helper.checkQuery({
         uid: /^\d+$/
     }, function () {
         var userDao = new UserDao(req.query);
@@ -37,7 +37,7 @@ router.get('/getById', function (req, res, next) {
 //POST 添加 /users/add?name=xxx&login_id=xxx&login_pwd=xxx
 router.all('/add', function (req, res, next) {
     var helper = new HttpHelper(req, res, next);
-    helper.checkParam({
+    helper.checkQuery({
         name: /^[a-zA-Z0-9_]{4,10}$/,
         login_id: /^[a-zA-Z0-9_]{4,18}$/,
         login_pwd: /^[a-zA-Z0-9_]{4,18}$/
@@ -52,7 +52,7 @@ router.all('/add', function (req, res, next) {
 //POST 删除 /users/delete?uid=xxx
 router.all('/delete', function (req, res, next) {
     var helper = new HttpHelper(req, res, next);
-    helper.checkParam({
+    helper.checkQuery({
         uid: /^\d+$/
     }, function () {
         var userDao = new UserDao(req.query);
@@ -65,7 +65,7 @@ router.all('/delete', function (req, res, next) {
 //POST 更新 /users/update?uid=xxx&name=xxx&login_id=xxx&login_pwd=xxx
 router.all('/update', function (req, res, next) {
     var helper = new HttpHelper(req, res, next);
-    helper.checkParam({
+    helper.checkQuery({
         uid: /^\d+$/,
         name: /^[a-zA-Z0-9_]{4,10}$/,
         login_pwd: /^[a-zA-Z0-9_]{4,18}$/
