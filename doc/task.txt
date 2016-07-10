@@ -12,15 +12,24 @@
 13. 模块实现，配置管理商品
 14. 模块实现，支付
 
-45days
+45days -7.6 start
 base dev - 25d
 fix bug - 10d
 modify feature - 5d
 deploy environment - 5d
 
 
-to-do use correct METHOD post/get
+to-do use correct METHOD post/get -complete!
 to-do 密码错误三次锁定账户
 to-do 图片验证码
-to-do md5加密
+to-do md5加密 -complete!
 to-do 不安全字符过滤
+to-do 权限模块
+to-do 工作流
+to-do 定时任务
+to-do 模糊查询
+to-do 前端框架选型
+to-do 文件解析和生成
+to-do 文件上传下载
+to-do 富文本编辑器支持（Markdown）
+to-do 外部系统对接
