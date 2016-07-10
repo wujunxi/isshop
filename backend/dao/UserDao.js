@@ -42,7 +42,7 @@ const sql = {
     queryById: 'select * from user_info where uid = $uid',
     queryAll: 'select * from user_info $_limit',
     query: 'select * from user_info where 1=1 {and uid=$uid} {and name=$name} {and login_id=$login_id} $_limit',
-    checkLogin: 'select * from user_info where login_id = $login_id and login_pwd = $login_pwd'
+    checkLogin: 'select * from user_info where login_id = $login_id'
 };
 
 class UserDao extends Dao {

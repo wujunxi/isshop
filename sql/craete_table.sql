@@ -5,6 +5,7 @@
 -- show create table user_info;
 
 -- source sql_file_path;
+-- show index from user_info;
 
 use isshop_db;
     drop table if exists user_info;
@@ -18,3 +19,5 @@ use isshop_db;
     create_time datetime default now() comment '创建时间',
     modify_time datetime default now() comment '修改时间'
 ) comment = '用户信息';
+
+create unique index idx_login_id on user_info(login_id); -- 添加 login_id 唯一索引

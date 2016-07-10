@@ -1,11 +1,11 @@
-require(['jquery'],function($){
+require(['jquery','jquery.md5'],function($){
     $(function(){
         $("#btnLogin").click(function(){
             $.ajax({
                 url:'/login',
                 data:{
                     login_id:$("#tbID").val(),
-                    login_pwd:$("#tbPwd").val()
+                    login_pwd:$.md5($("#tbPwd").val())
                 },
                 dataType:'json',
                 type:"post",
