@@ -1,8 +1,16 @@
 "use strict";
 let _env = 'dev';
-let mysql = {},session = {};
+let mysql = {},
+    session = {},
+    log = {};
+
+// 日志打印配置 combined/common/dev/short
+log.default =
+log.dev = 'dev';
+log.test = 'combined';
 
 // MySQL数据库联接配置
+mysql.default =
 mysql.dev = {
     //debug:['ComQueryPacket', 'RowDataPacket'],
     debug: ['ComQueryPacket'],
@@ -23,6 +31,7 @@ mysql.test = {
 };
 
 // session 配置
+session.default =
 session.dev =
 session.test = {
     key: 'sessionID',
@@ -41,9 +50,12 @@ module.exports = {
         }
     },
     get mysql(){
-        return mysql[_env];
+        return mysql[_env] || mysql['default'];
     },
     get session(){
-        return session[_env];
+        return session[_env] || mysql['default'];
+    },
+    get log(){
+        return log[_env] || log['default'];
     }
 };

@@ -6,9 +6,8 @@ var HttpHelper = require('../util/HttpHelper');
 router.all('/', function (req, res, next) {
     var helper = new HttpHelper(req, res, next);
     req.session.destroy(function(err) {
-        // cannot access session here
         if(err){
-            helper.error('0007');
+            helper.code('0007');
         }else{
             helper.success();
         }

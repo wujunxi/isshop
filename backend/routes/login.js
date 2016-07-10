@@ -3,25 +3,24 @@ var router = express.Router();
 var UserDao = require('../dao/UserDao');
 var HttpHelper = require('../util/HttpHelper');
 
-//POST 登陆 /login?login_id=xxx&login_pwd=xxx
+//POST 登陆 /login
+// body {login_id:xxx,login_pwd:xxx}
 router.post('/', function (req, res, next) {
     var helper = new HttpHelper(req, res, next);
     var userDao = new UserDao(req.body);
-    if(!req.body.login_id){
-        helper.error('0005');
-        return;
-    }
-    if(!req.body.login_pwd){
-        helper.error('0006');
+    var result = userDao.check(['login_id','login_pwd']);
+    if(result !== true){
+        helper.error(result);
         return;
     }
     userDao.checkLogin(function (userObj) {
-        if(userObj){
-            var obj = {uid:userObj.uid,name:userObj.name};
+        if (userObj) {
+            // 将用户信息放入session
+            var obj = {uid: userObj.uid, name: userObj.name};
             req.session.user = obj;
             helper.success(obj);
-        }else{
-            helper.error('0003');
+        } else {
+            helper.code('0003');
         }
     });
 });

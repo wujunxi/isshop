@@ -24,6 +24,12 @@ block content
         label 登录账户
         input#tbLoginID(type='text')
         button#btnQuery 查询
+        h3 插入用户信息
+        #divAddUser
+            input(type='text',name='name',placeholder='姓名')
+            input(type='text',name='login_id',placeholder='账户')
+            input(type='text',name='login_pwd',placeholder='密码')
+        button#btnAddUser 添加用户
 
 block scripts
     script(type='text/javascript',src='/scripts/lib/require.min.js',data-main='/login/js/login.js')

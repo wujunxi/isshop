@@ -1,64 +1,95 @@
 "use strict";
 let Dao = require('./Dao');
+let comm = require('../util/common');
+
+// 字段
+let fields = {
+    uid: '用户编码',
+    name: '用户名',
+    login_id: '账号',
+    login_pwd: '密码',
+    md5_key: 'MD5 Key',
+    state: '状态'
+};
+
+// 字段校验规则
+let rules = {
+    uid: function () {
+        if (!this.uid) return `${fields.uid}不能为空`;
+        if (!/^\d+$/.test(this.uid)) return `${fields.uid}只能由数字组成`;
+        return true;
+    },
+    name: function () {
+        return comm.checkName(this.name);
+    },
+    login_id: function () {
+        if (!this.login_id) return `${fields.login_id}不能为空`;
+        if (!/^[0-9a-zA-Z]{6,32}$/.test(this.login_id))
+            return `${fields.login_id}只能由字母和数字组成，最少6位，最长32位`;
+        return true;
+    },
+    login_pwd: function () {
+        if (!this.login_pwd) return `${fields.login_pwd}不能为空`;
+        return true;
+    }
+};
+
+// SQL
+const sql = {
+    insert: 'insert into user_info (name,login_id,login_pwd,md5_key)values($name,$login_id,$login_pwd,$md5_key)',
+    update: 'update user_info set name = $name, login_pwd = $login_pwd, md5_key = $md5_key, modify_time = now() where uid = $uid',
+    'delete': 'delete from user_info where uid = $uid',
+    queryById: 'select * from user_info where uid = $uid',
+    queryAll: 'select * from user_info $_limit',
+    query: 'select * from user_info where 1=1 {and uid=$uid} {and name=$name} {and login_id=$login_id} $_limit',
+    checkLogin: 'select * from user_info where login_id = $login_id and login_pwd = $login_pwd'
+};
+
 class UserDao extends Dao {
     constructor(obj) {
-        obj = obj || {};
-        super(obj);
-        this.uid = obj.uid;
-        this.name = obj.name;
-        this.login_id = obj.login_id;
-        this.login_pwd = obj.login_pwd;
-        this.md5_key = obj.md5_key;
+        super();
+        super.__extend();
+        super.__load(obj);
     }
 
     get sql() {
-        return {
-            insert: 'insert into user_info (name,login_id,login_pwd,md5_key)values(?,?,?,?)',
-            insertParam: [this.name, this.login_id, this.login_pwd, this.md5_key],
-            update: 'update user_info set name = ?, login_pwd = ?,md5_key = ?,modify_time = now() where uid = ?',
-            updateParam: [this.name, this.login_pwd, this.md5_key, this.uid],
-            'delete': 'delete from user_info where uid = ?',
-            deleteParam: [this.uid],
-            queryById: 'select * from user_info where uid = ?',
-            queryByIdParam: [this.uid],
-            queryAll: 'select * from user_info limit ?,?',
-            queryAllParam: [+this.page * this.size, +this.size],
-            countAll: 'select count(1) as total from user_info',
-            query: (() => {
-                let sql = 'select * from user_info where 1=1',
-                    index = +this.page * this.size,
-                    size = this.size;
-                if (this.uid) sql += ' and uid=' + this.pool.escape(this.uid);
-                if (this.name) sql += ' and name=' + this.pool.escape(this.name);
-                if (this.login_id) sql += ' and login_id=' + this.pool.escape(this.login_id);
-                sql += ' limit ' + this.pool.escape(index) + ',' + this.pool.escape(size);
-                return sql;
-            })(),
-            countQuery: (() => {
-                let sql = 'select count(1) as total from user_info where 1=1';
-                if (this.uid) sql += ' and uid=' + this.pool.escape(this.uid);
-                if (this.name) sql += ' and name=' + this.pool.escape(this.name);
-                if (this.login_id) sql += ' and login_id=' + this.pool.escape(this.login_id);
-                return sql;
-            })(),
-            checkLogin:'select * from user_info where login_id = ? and login_pwd = ?',
-            checkLoginParam:[this.login_id,this.login_pwd]
-        };
+        return sql;
     }
-    checkLogin(cb){
+
+    /**
+     * 登录检测
+     * @param cb
+     */
+    checkLogin(cb) {
         let self = this;
         self.pool.getConnection((err, conn) => {
-            if(err) throw err;
-            conn.query(this.sql.checkLogin,this.sql.checkLoginParam,function(err, rows){
+            if (err) throw err;
+            conn.query(self.parseSql(self.sql.checkLogin), function (err, rows) {
                 conn.release();
-                if(err) throw err;
+                if (err) throw err;
                 if (rows && rows.length > 0) {
                     cb(rows[0]);
-                }else{
+                } else {
                     cb();
                 }
             });
         });
+    }
+
+    get __fields() {
+        return fields;
+    }
+
+    set __fields(f) {
+        fields = f;
+    }
+
+    get __rules() {
+        return rules;
+    }
+
+    set __rules(r) {
+        rules = r;
     }
 }
 

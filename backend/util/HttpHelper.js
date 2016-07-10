@@ -1,7 +1,9 @@
 "use strict";
 
-let ERROR_MSG = {
-    "0000": "未定义错误",
+const SUCC_CODE = "00";
+
+const ERROR_CODE_MSG = {
+    "0000": "系统繁忙，请稍后再试",
     "0001": "缺失入参",
     "0002": "入参有误",
     "0003": "用户名或密码错误",
@@ -11,41 +13,21 @@ let ERROR_MSG = {
     "0007": "注销失败"
 };
 
-let AJAX_SUCC = "00";
-
 class HttpHelper {
     constructor(req, res, next) {
-        this.req = req;
-        this.res = res;
-        this.next = next;
+        Object.assign(this, {req, res, next});
     }
 
-    checkQuery(opt, cb) {
-        let param;
-        for (let k in opt) {
-            param = this.req.query[k];
-            if (typeof(param) == "undefined" || param == "") {
-                this.error("0001");
-                return;
-            } else if (!opt[k].test(param)) {
-                this.error("0002");
-                return;
-            }
-        }
-        if (cb) {
-            cb();
-        }
-    }
-
-    error(code, msg) {
-        code = code || "0000";
-        msg =  msg || ERROR_MSG[code] || "";
+    code(code = "0000", msg = ERROR_CODE_MSG[code] || "") {
         this.res.json({code: code, msg: msg});
     }
 
-    success(obj) {
-        obj = obj || {};
-        this.res.json({code: AJAX_SUCC, msg: "", data: obj});
+    error(msg) {
+        this.code(undefined, msg);
+    }
+
+    success(obj = {}) {
+        this.res.json({code: SUCC_CODE, msg: "", data: obj});
     }
 }
 module.exports = HttpHelper;

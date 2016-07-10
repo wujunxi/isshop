@@ -11,7 +11,7 @@ router.all('*',function(req,res,next){
     if(req.session.user && req.session.user.uid && req.session.user.uid != ""){
         next();
     }else{
-        helper.error("0004");
+        helper.code("0004");
     }
 });
 

@@ -1,9 +1,9 @@
-1. 搭建express + mysql，实现增删查改
-2. 搭建 jade + gulp
-3. 增加 redis，session控制
-4. 完善前后端通讯协议
+1. 搭建express + mysql，实现增删查改 -ok
+2. 搭建 jade + gulp -ok
+3. 增加 redis，session控制 -50%
+4. 完善前后端通讯协议 -50%
 5. 动画效果实现
-6. ngix部署
+6. ngix部署 -ok
 7. 模块实现，登陆、注册
 9. 模块实现，自定义商品
 10. 模块实现，订单生成
@@ -20,3 +20,7 @@ deploy environment - 5d
 
 
 to-do use correct METHOD post/get
+to-do 密码错误三次锁定账户
+to-do 图片验证码
+to-do md5加密
+to-do 不安全字符过滤

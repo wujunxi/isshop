@@ -23,8 +23,8 @@
 5. 进入项目 backend 文件夹，编译前端文件
     gulp
 
-6. 安装pm2日志分割
-    pm2 install pm2 -logrotate
+6. 安装pm2日志分割 [pm2-logrotate](https://github.com/pm2-hive/pm2-logrotate)
+    pm2 install pm2-logrotate
     设置分割大小
     pm2 set pm2-logrotate:max_size 10M
 
