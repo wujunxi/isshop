@@ -42,7 +42,7 @@ const sql = {
     queryById: 'select * from user_info where uid = $uid',
     queryAll: 'select * from user_info $_limit',
     query: 'select * from user_info where 1=1 {and uid=$uid} {and name=$name} {and login_id=$login_id} $_limit',
-    checkLogin: 'select * from user_info where login_id = $login_id'
+    queryByLoginID: 'select * from user_info where login_id = $login_id'
 };
 
 class UserDao extends Dao {
@@ -57,14 +57,14 @@ class UserDao extends Dao {
     }
 
     /**
-     * 登录检测
+     * 根据登录id查询
      * @param cb
      */
-    checkLogin(cb) {
+    queryByLoginID(cb) {
         let self = this;
         self.pool.getConnection((err, conn) => {
             if (err) throw err;
-            conn.query(self.parseSql(self.sql.checkLogin), function (err, rows) {
+            conn.query(self.parseSql(self.sql.queryByLoginID), function (err, rows) {
                 conn.release();
                 if (err) throw err;
                 if (rows && rows.length > 0) {

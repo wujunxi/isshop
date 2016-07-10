@@ -2,28 +2,31 @@ var express = require('express');
 var router = express.Router();
 var UserDao = require('../dao/UserDao');
 var HttpHelper = require('../util/HttpHelper');
+var loginService = require('../service/loginService');
 
-//POST 登陆 /register
+//POST 注册 /register
 //body {name:xxx,login_id:xxx,login_pwd:xxx}
 router.post('/', function (req, res, next) {
     var helper = new HttpHelper(req, res, next);
     var userDao = new UserDao(req.body);
-    if(!req.body.login_id){
-        helper.error('0005');
+    var result = userDao.check(['name','login_id','login_pwd']);
+    if(result !== true){
+        helper.error(result);
         return;
     }
-    if(!req.body.login_pwd){
-        helper.error('0006');
-        return;
-    }
-    userDao.checkLogin(function (userObj) {
-        if(userObj){
-            var obj = {uid:userObj.uid,name:userObj.name};
-            req.session.user = obj;
-            helper.success(obj);
-        }else{
-            helper.error('0003');
+    // 检查用户是否存在
+    userDao.queryByLoginID(function (userObj) {
+        if (userObj) {
+            helper.code('0009');
+            return;
         }
+        // 生成md5 key
+        var key = loginService.randomKey();
+        userDao.md5_key = key;
+        userDao.login_pwd = loginService.md5Pwd(userDao.login_pwd,key);
+        userDao.insert(function(uid){
+            helper.success({uid: uid});
+        })
     });
 });
 

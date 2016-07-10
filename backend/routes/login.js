@@ -14,7 +14,7 @@ router.post('/', function (req, res, next) {
         helper.error(result);
         return;
     }
-    userDao.checkLogin(function (userObj) {
+    userDao.queryByLoginID(function (userObj) {
         if (!userObj) {
             helper.code('0003');
             return;

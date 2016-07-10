@@ -11,7 +11,8 @@ var loginFilter = require('./filter/login-filter'),
     routes = require('./routes/index'),
     login = require('./routes/login'),
     logout = require('./routes/logout'),
-    users = require('./routes/users');
+    users = require('./routes/users'),
+    register = require('./routes/register');
 
 var $conf = require('./conf');
 var Dao = require('./dao/Dao');
@@ -56,6 +57,7 @@ app.use(express.static(path.join(__dirname, '../frontend/public')));
 app.use('/', routes);
 app.use('/login', login);
 app.use('/logout', logout);
+app.use('/register', register);
 app.use('/users', loginFilter, users);
 
 // catch 404 and forward to error handler

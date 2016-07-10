@@ -54,5 +54,23 @@ require(['jquery','jquery.md5'],function($){
                 }
             });
         });
+        $("#btnRegister").click(function(){
+            var obj = {};
+            $("#divAddUser").children('[name]').each(function(){
+                var $this = $(this),
+                    k = $this.attr("name");
+                obj[k] = $this.val();
+            });
+            obj.login_pwd = $.md5(obj.login_pwd);
+            $.ajax({
+                url:'/register',
+                data:obj,
+                dataType:'json',
+                type:"post",
+                success:function(result){
+                    console.log(result);
+                }
+            });
+        });
     });
 });
