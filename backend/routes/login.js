@@ -8,7 +8,7 @@ var LoginService = require('../service/LoginService');
 router.post('/', function (req, res, next) {
     var helper = new HttpHelper(req, res, next);
     var loginService = new LoginService();
-    loginService.checkLogin(req.body, function (userObj,err) {
+    loginService.checkLogin(req.body, function (err,userObj) {
         if(err){
             helper.error(err);
             return;
