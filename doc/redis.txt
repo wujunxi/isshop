@@ -1,0 +1,17 @@
+select index 切换到指定的数据库
+quit 退出数据库
+set
+key * 取出所有key
+key xxx 取出名为xxx的键
+exists 判断一个key是否存在
+del 删除一个key
+expire 设置一个key的过期时间
+persist 取消定时
+move 将当前数据库中的key移到其他数据库
+randomkey 随机返回key空间的一个值
+type 返回值的类型
+ping 测试连接是否还活着
+info 获取服务器信息和统计
+flushdb 删除当前选择的数据库中的key
+flushall 删除所有数据库中的key
+dbsize 返回当前数据库中key的数目

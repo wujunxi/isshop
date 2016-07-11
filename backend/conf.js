@@ -43,6 +43,7 @@ session.test = {
 
 // 配置文件
 module.exports = {
+    loginErrorLimit:3, // 登录错误次数限制
     set env(v){
         let envs = ['dev','pro','test'];
         if(envs.indexOf(v) != -1){

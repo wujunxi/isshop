@@ -1,27 +1,16 @@
 var express = require('express');
 var router = express.Router();
-var UserDao = require('../dao/UserDao');
 var HttpHelper = require('../util/HttpHelper');
-var loginService = require('../service/loginService');
+var LoginService = require('../service/LoginService');
 
 //POST 登陆 /login
 // body {login_id:xxx,login_pwd:xxx}
 router.post('/', function (req, res, next) {
     var helper = new HttpHelper(req, res, next);
-    var userDao = new UserDao(req.body);
-    var result = userDao.check(['login_id', 'login_pwd']);
-    if (result !== true) {
-        helper.error(result);
-        return;
-    }
-    userDao.queryByLoginID(function (userObj) {
-        if (!userObj) {
-            helper.code('0003');
-            return;
-        }
-        var md5Pwd = loginService.md5Pwd(userDao.login_pwd, userObj.md5_key);
-        if (userObj.login_pwd != md5Pwd) {
-            helper.code('0008');
+    var loginService = new LoginService();
+    loginService.checkLogin(req.body, function (userObj,err) {
+        if(err){
+            helper.error(err);
             return;
         }
         // 将用户信息放入session
