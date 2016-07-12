@@ -14,8 +14,12 @@ router.get('/get', function (req, res, next) {
     //     return;
     // }
     // 查询成功返回记录列表及记录总数
-    userDao.query(function (list, total) {
-        helper.success({total: total, page: userDao.page, size: userDao.size, list: list});
+    userDao.query(function (err, list, total) {
+        if (err) {
+            helper.error(err);
+        } else {
+            helper.success({total: total, page: userDao.page, size: userDao.size, list: list});
+        }
     });
 });
 
@@ -24,8 +28,12 @@ router.get('/getAll', function (req, res, next) {
     var helper = new HttpHelper(req, res, next);
     var userDao = new UserDao(req.query);
     // 查询成功返回记录列表及记录总数
-    userDao.queryAll(function (list, total) {
-        helper.success({total: total, page: userDao.page, size: userDao.size, list: list});
+    userDao.queryAll(function (err, list, total) {
+        if (err) {
+            helper.error(err);
+        } else {
+            helper.success({total: total, page: userDao.page, size: userDao.size, list: list});
+        }
     });
 });
 
@@ -35,13 +43,17 @@ router.get('/getById', function (req, res, next) {
     var userDao = new UserDao(req.query);
     // 校验入参
     var result = userDao.check(['uid']);
-    if(result !== true){
+    if (result !== true) {
         helper.error(result);
         return;
     }
     // 查询成功返回记录对象
-    userDao.queryById(function (userObj) {
-        helper.success(userObj);
+    userDao.queryById(function (err, userObj) {
+        if (err) {
+            helper.error(err);
+        } else {
+            helper.success(userObj);
+        }
     });
 });
 
@@ -51,14 +63,18 @@ router.post('/add', function (req, res, next) {
     var helper = new HttpHelper(req, res, next);
     var userDao = new UserDao(req.body);
     // 校验入参
-    var result = userDao.check(['name','login_id','login_pwd']);
-    if(result !== true){
+    var result = userDao.check(['name', 'login_id', 'login_pwd']);
+    if (result !== true) {
         helper.error(result);
         return;
     }
     // 插入成功返回uid
-    userDao.insert(function (uid) {
-        helper.success({uid: uid});
+    userDao.insert(function (err, resultObj) {
+        if (err) {
+            helper.error(err);
+        } else {
+            helper.success(resultObj);
+        }
     });
 });
 
@@ -68,14 +84,17 @@ router.post('/delete', function (req, res, next) {
     var helper = new HttpHelper(req, res, next);
     var userDao = new UserDao(req.body);
     var result = userDao.check(['uid']);
-    if(result === true){
-        // 删除成功返回uid
-        userDao.delete(function (uid) {
-            helper.success({uid: uid});
-        });
-    }else{
+    if (result !== true) {
         helper.error(result);
+        return;
     }
+    userDao.delete(function (err) {
+        if (err) {
+            helper.error(err);
+        } else {
+            helper.success();
+        }
+    });
 });
 
 //POST 更新 /users/update
@@ -83,15 +102,18 @@ router.post('/delete', function (req, res, next) {
 router.post('/update', function (req, res, next) {
     var helper = new HttpHelper(req, res, next);
     var userDao = new UserDao(req.body);
-    var result = userDao.check(['name','login_id','login_pwd']);
-    if(result === true){
-        // 更新成功返回uid
-        userDao.update(function (uid) {
-            helper.success({uid: uid});
-        });
-    }else{
+    var result = userDao.check(['name', 'login_id', 'login_pwd']);
+    if (result !== true) {
         helper.error(result);
+        return;
     }
+    userDao.update(function (err) {
+        if (err) {
+            helper.error(err);
+        } else {
+            helper.success();
+        }
+    });
 });
 
 module.exports = router;

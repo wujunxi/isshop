@@ -1,6 +1,6 @@
 1. 搭建express + mysql，实现增删查改 -ok
 2. 搭建 jade + gulp -ok
-3. 增加 redis，session控制 -50%
+3. 增加 redis，session控制 -ok
 4. 完善前后端通讯协议 -50%
 5. 动画效果实现
 6. ngix部署 -ok
@@ -20,7 +20,6 @@ deploy environment - 5d
 
 
 to-do use correct METHOD post/get -complete!
-to-do 密码错误三次锁定账户
 to-do 图片验证码
 to-do md5加密 -complete!
 to-do 不安全字符过滤
@@ -33,5 +32,5 @@ to-do 文件解析和生成
 to-do 文件上传下载
 to-do 富文本编辑器支持（Markdown）
 to-do 外部系统对接
-to-do 使用redis实现登录错误次数限制
+to-do 使用redis实现登录错误次数限制 -complete!
 to-do 审计服务

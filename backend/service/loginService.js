@@ -41,9 +41,7 @@ class LoginService {
             let key = self.randomKey();
             userDao.md5_key = key;
             userDao.login_pwd = self.md5Pwd(userDao.login_pwd, key);
-            userDao.insert(function (uid) {
-                cb(null,{uid: uid});
-            })
+            userDao.insert(cb)
         });
     }
 

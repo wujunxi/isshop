@@ -1,7 +1,8 @@
 "use strict";
+const ERR_BUSY = '系统繁忙，请稍后再试';
+
 // 连接池
 let _pool;
-
 
 // 域
 let fields = {
@@ -135,12 +136,12 @@ class Dao {
 
     /**
      * 转义计数SQL
-     * 将select xxx 语句转换为 select count(1)，并去掉尾部的 limit
+     * 将select xxx 语句转换为 select count(1) as total，并去掉尾部的 limit
      * @param sqlStr
      * @returns {string|XML}
      */
     parseCountSql(sqlStr) {
-        let sql = 'select count(1)' + sqlStr.substr(sqlStr.indexOf(' from '));
+        let sql = 'select count(1) as total' + sqlStr.substr(sqlStr.indexOf(' from '));
         return this.parseSql(sql.replace('$_limit', ''));
     }
 
@@ -150,10 +151,22 @@ class Dao {
      */
     insert(cb) {
         this.pool.getConnection((err, conn) => {
-            if (err) throw err;
+            if (err) {
+                console.error(err);
+                cb(ERR_BUSY);
+                return;
+            }
             conn.query(this.parseSql(this.sql.insert), function (err, result) {
+                conn.release();
+                if (err) {
+                    console.error(err);
+                    cb(ERR_BUSY);
+                    return;
+                }
                 if (result && result.affectedRows > 0) {
-                    cb(result.insertId);
+                    cb(null, {uid: result.insertId});
+                } else {
+                    cb('数据提交失败');
                 }
             });
         })
@@ -165,11 +178,22 @@ class Dao {
      */
     delete(cb) {
         this.pool.getConnection((err, conn) => {
-            if (err) throw err;
+            if (err) {
+                console.error(err);
+                cb(ERR_BUSY);
+                return;
+            }
             conn.query(this.parseSql(this.sql.delete), function (err, result) {
-                if (err) throw err;
+                conn.release();
+                if (err) {
+                    console.error(err);
+                    cb(ERR_BUSY);
+                    return;
+                }
                 if (result && result.affectedRows > 0) {
                     cb();
+                } else {
+                    cb('无数据');
                 }
             });
         })
@@ -181,11 +205,22 @@ class Dao {
      */
     update(cb) {
         this.pool.getConnection((err, conn) => {
-            if (err) throw err;
+            if (err) {
+                console.error(err);
+                cb(ERR_BUSY);
+                return;
+            }
             conn.query(this.parseSql(this.sql.update), function (err, result) {
-                if (err) throw err;
+                conn.release();
+                if (err) {
+                    console.error(err);
+                    cb(ERR_BUSY);
+                    return;
+                }
                 if (result && result.affectedRows > 0) {
                     cb();
+                } else {
+                    cb('数据更新失败');
                 }
             });
         })
@@ -197,14 +232,20 @@ class Dao {
      */
     queryById(cb) {
         this.pool.getConnection((err, conn) => {
-            if (err) throw err;
+            if (err) {
+                console.error(err);
+                cb(ERR_BUSY);
+                return;
+            }
             conn.query(this.parseSql(this.sql.queryById), function (err, rows) {
                 conn.release();
                 if (err) {
-                    throw err;
+                    console.error(err);
+                    cb(ERR_BUSY);
+                    return;
                 }
                 if (rows && rows.length > 0) {
-                    cb(rows[0]);
+                    cb(null, rows[0]);
                 } else {
                     cb();
                 }
@@ -219,12 +260,18 @@ class Dao {
     queryAll(cb) {
         var self = this;
         self.pool.getConnection((err, conn) => {
-            if (err) throw err;
+            if (err) {
+                console.error(err);
+                cb(ERR_BUSY);
+                return;
+            }
             // 查询记录条数
             conn.query(self.parseCountSql(self.sql.queryAll), function (err, rows) {
                 if (err) {
                     conn.release();
-                    throw err;
+                    console.error(err);
+                    cb(ERR_BUSY);
+                    return;
                 }
                 let total = 0;
                 if (rows && rows.length > 0 && rows[0].total) {
@@ -233,17 +280,21 @@ class Dao {
                 // 如果记录条数为0，不做列表查询
                 if (total == 0) {
                     conn.release();
-                    cb([], total);
+                    cb(null, [], total);
                     return;
                 }
                 // 查询数据
                 conn.query(self.parseSql(self.sql.queryAll), function (err, rows) {
                     conn.release();
-                    if (err) throw err;
+                    if (err) {
+                        console.error(err);
+                        cb(ERR_BUSY);
+                        return;
+                    }
                     if (rows && rows.length > 0) {
-                        cb(rows, total);
+                        cb(null, rows, total);
                     } else {
-                        cb([], total);
+                        cb(null, [], total);
                     }
                 });
             });
@@ -253,25 +304,41 @@ class Dao {
     query(cb) {
         let self = this;
         self.pool.getConnection((err, conn) => {
-            if (err) throw err;
+            if (err) {
+                console.error(err);
+                cb(ERR_BUSY);
+                return;
+            }
             // 查询记录条数
             conn.query(self.parseCountSql(self.sql.query), function (err, rows) {
                 if (err) {
                     conn.release();
-                    throw err;
+                    console.error(err);
+                    cb(ERR_BUSY);
+                    return;
                 }
                 let total = 0;
                 if (rows && rows.length > 0 && rows[0].total) {
                     total = rows[0].total;
                 }
+                // 如果记录条数为0，不做列表查询
+                if (total == 0) {
+                    conn.release();
+                    cb(null, [], total);
+                    return;
+                }
                 // 查询数据
                 conn.query(self.parseSql(self.sql.query), function (err, rows) {
                     conn.release();
-                    if (err) throw err;
+                    if (err) {
+                        console.error(err);
+                        cb(ERR_BUSY);
+                        return;
+                    }
                     if (rows && rows.length > 0) {
-                        cb(rows, total);
+                        cb(null, rows, total);
                     } else {
-                        cb([], total);
+                        cb(null, [], total);
                     }
                 });
             });
