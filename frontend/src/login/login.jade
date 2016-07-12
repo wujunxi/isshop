@@ -8,29 +8,40 @@ block links
 block content
     include ../includes/header
     .content
+        h3 注册
+        form#formRegisterUser
+            input(type='text',name='name',placeholder='姓名')
+            input(type='text',name='login_id',placeholder='账户')
+            input(type='text',name='login_pwd',placeholder='密码')
+        button#btnRegisterUser 注册
         h3 登录
-        label 账户
-        input#tbID(type='text',placeholder='请输入账户')
-        label 密码
-        input#tbPwd(type='password',placeholder='请输入密码')
+        form#formLogin
+            input(type='text',name='login_id',placeholder='请输入账户')
+            input(type='password',name='login_pwd',placeholder='请输入密码')
         button#btnLogin 登录
         button#btnLogout 注销
-        br/
         h3 用户信息查询
-        label 用户编码
-        input#tbUid(type='text')
-        label 用户名
-        input#tbName(type='text')
-        label 登录账户
-        input#tbLoginID(type='text')
-        button#btnQuery 查询
+        form#formQueryUser
+            input(type='text',name='uid',placeholder='编码')
+            input(type='text',name='name',placeholder='姓名')
+            input(type='text',name='login_id',placeholder='账户')
+        button#btnQueryUser 查询
         h3 插入用户信息
-        #divAddUser
+        form#formAddUser
             input(type='text',name='name',placeholder='姓名')
             input(type='text',name='login_id',placeholder='账户')
             input(type='text',name='login_pwd',placeholder='密码')
         button#btnAddUser 添加用户
-        button#btnRegister 注册
-
+        h3 删除用户
+        form#formDeleteUser
+            input(type='text',name='uid',placeholder='编码')
+        button#btnDeleteUser 删除用户
+        h3 更新用户
+        form#formUpdateUser
+            input(type='text',name='uid',placeholder='编码')
+            input(type='text',name='name',placeholder='姓名')
+            input(type='text',name='login_id',placeholder='账户')
+            input(type='text',name='login_pwd',placeholder='密码')
+        button#btnUpdateUser 更新用户
 block scripts
     script(type='text/javascript',src='/scripts/lib/require.min.js',data-main='/login/js/login.js')

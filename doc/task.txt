@@ -20,6 +20,7 @@ deploy environment - 5d
 
 
 to-do use correct METHOD post/get -complete!
+to-do 修改密码
 to-do 图片验证码
 to-do md5加密 -complete!
 to-do 不安全字符过滤

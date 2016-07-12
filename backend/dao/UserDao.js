@@ -37,7 +37,7 @@ let rules = {
 // SQL
 const sql = {
     insert: 'insert into user_info (name,login_id,login_pwd,md5_key)values($name,$login_id,$login_pwd,$md5_key)',
-    update: 'update user_info set name = $name, login_pwd = $login_pwd, md5_key = $md5_key, modify_time = now() where uid = $uid',
+    update: 'update user_info set {name = $name,} {login_pwd = $login_pwd,} {md5_key = $md5_key,} modify_time = now() where uid = $uid',
     'delete': 'delete from user_info where uid = $uid',
     queryById: 'select * from user_info where uid = $uid',
     queryAll: 'select * from user_info $_limit',

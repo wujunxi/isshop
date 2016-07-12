@@ -21,3 +21,4 @@ use isshop_db;
 ) comment = '用户信息';
 
 create unique index idx_login_id on user_info(login_id); -- 添加 login_id 唯一索引
+create index idx_name on user_info(name); -- 添加 name 索引

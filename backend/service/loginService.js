@@ -14,14 +14,29 @@ class LoginService {
 
     }
 
+    /**
+     * MD5加密密码
+     * @param pwd
+     * @param key
+     * @returns {*}
+     */
     md5Pwd(pwd, key = '') {
         return crypto.createHash('md5').update(pwd + key).digest('hex');
     }
 
+    /**
+     * 生产随机串
+     * @returns {string}
+     */
     randomKey() {
         return crypto.randomBytes(4).toString('hex');
     }
 
+    /**
+     * 用户注册
+     * @param obj
+     * @param cb
+     */
     register(obj,cb){
         let self = this;
         let userDao = new UserDao(obj);
@@ -45,6 +60,11 @@ class LoginService {
         });
     }
 
+    /**
+     * 登陆判断
+     * @param obj
+     * @param cb
+     */
     checkLogin(obj, cb) {
         let self = this;
         let userDao = new UserDao(obj);
