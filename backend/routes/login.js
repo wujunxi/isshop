@@ -9,13 +9,13 @@ var LoginService = require('../service/LoginService');
 router.post('/', function (req, res, next) {
     var helper = new HttpHelper(req, res, next);
     var loginService = new LoginService();
-    loginService.checkLogin(req.body, function (err,userObj) {
+    loginService.checkLogin(req.body, function (err,resultObj) {
         if(err){
             helper.error(err);
             return;
         }
         // 将用户信息放入session
-        var obj = {uid: userObj.uid, name: userObj.name};
+        var obj = {uid: resultObj.uid, name: resultObj.name};
         req.session.user = obj;
         helper.success(obj);
     });

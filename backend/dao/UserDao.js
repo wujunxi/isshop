@@ -37,15 +37,28 @@ let rules = {
 // SQL
 const sql = {
     insert: 'insert into user_info (name,login_id,login_pwd,md5_key)values($name,$login_id,$login_pwd,$md5_key)',
-    update: 'update user_info set {name = $name,} {login_pwd = $login_pwd,} {md5_key = $md5_key,} modify_time = now() where uid = $uid',
     'delete': 'delete from user_info where uid = $uid',
-    queryById: 'select * from user_info where uid = $uid',
-    queryAll: 'select * from user_info $_limit',
+    update: 'update user_info set name = $name, login_pwd = $login_pwd, md5_key = $md5_key, modify_time = now() where uid = $uid',
+    updateLoginPwd: 'update user_info set login_pwd = $login_pwd, modify_time = now() where uid = $uid',
     query: 'select * from user_info where 1=1 {and uid=$uid} {and name=$name} {and login_id=$login_id} $_limit',
+    queryByID: 'select * from user_info where uid = $uid',
     queryByLoginID: 'select * from user_info where login_id = $login_id'
 };
 
 class UserDao extends Dao {
+
+    queryByID(cb) {
+        this.query(cb,this.sql.queryByID);
+    }
+
+    queryByLoginID(cb){
+        this.query(cb, this.sql.queryByLoginID);
+    }
+
+    updateLoginPwd(cb){
+        this.update(cb,this.sql.updateLoginPwd);
+    }
+
     constructor(obj) {
         super();
         super.__extend();
@@ -54,26 +67,6 @@ class UserDao extends Dao {
 
     get sql() {
         return sql;
-    }
-
-    /**
-     * 根据登录id查询
-     * @param cb
-     */
-    queryByLoginID(cb) {
-        let self = this;
-        self.pool.getConnection((err, conn) => {
-            if (err) throw err;
-            conn.query(self.parseSql(self.sql.queryByLoginID), function (err, rows) {
-                conn.release();
-                if (err) throw err;
-                if (rows && rows.length > 0) {
-                    cb(rows[0]);
-                } else {
-                    cb();
-                }
-            });
-        });
     }
 
     get __fields() {

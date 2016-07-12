@@ -14,33 +14,44 @@ block content
             input(type='text',name='login_id',placeholder='账户')
             input(type='text',name='login_pwd',placeholder='密码')
         button#btnRegisterUser 注册
+
         h3 登录
         form#formLogin
             input(type='text',name='login_id',placeholder='请输入账户')
             input(type='password',name='login_pwd',placeholder='请输入密码')
         button#btnLogin 登录
         button#btnLogout 注销
+
+        h3 修改密码
+        form#formModifyPwd
+            input(type='text',name='uid',placeholder='请输入用户编码')
+            input(type='password',name='login_pwd',placeholder='请输入密码')
+            input(type='password',name='new_login_pwd',placeholder='请输入新密码')
+        button#btnModifyPwd 修改密码
+
         h3 用户信息查询
         form#formQueryUser
             input(type='text',name='uid',placeholder='编码')
             input(type='text',name='name',placeholder='姓名')
             input(type='text',name='login_id',placeholder='账户')
         button#btnQueryUser 查询
+
         h3 插入用户信息
         form#formAddUser
             input(type='text',name='name',placeholder='姓名')
             input(type='text',name='login_id',placeholder='账户')
             input(type='text',name='login_pwd',placeholder='密码')
         button#btnAddUser 添加用户
+
         h3 删除用户
         form#formDeleteUser
             input(type='text',name='uid',placeholder='编码')
         button#btnDeleteUser 删除用户
+
         h3 更新用户
         form#formUpdateUser
             input(type='text',name='uid',placeholder='编码')
             input(type='text',name='name',placeholder='姓名')
-            input(type='text',name='login_id',placeholder='账户')
             input(type='text',name='login_pwd',placeholder='密码')
         button#btnUpdateUser 更新用户
 block scripts

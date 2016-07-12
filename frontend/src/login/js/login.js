@@ -45,6 +45,21 @@ require(['jquery', 'jquery.md5'], function ($) {
                 console.log(result);
             });
         });
+        // 修改密码
+        $("#btnModifyPwd").click(function () {
+            var obj = getFormObj("#formModifyPwd");
+            obj.login_pwd = $.md5(obj.login_pwd);
+            obj.new_login_pwd = $.md5(obj.new_login_pwd);
+            $.ajax({
+                url: '/users/modify_pwd',
+                data: obj,
+                dataType: 'json',
+                type: "post",
+                success: function (result) {
+                    console.log(result);
+                }
+            });
+        });
         // 查询用户
         $("#btnQueryUser").click(function () {
             var obj = getFormObj("#formQueryUser");

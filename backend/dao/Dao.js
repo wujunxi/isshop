@@ -127,7 +127,7 @@ class Dao {
         }).replace(/\$\w+/g, function (meta) { // 处理$xxx
             // 脱$
             var k = meta.substr(1);
-            return self[k] ? self.pool.escape(self[k]) : '';
+            return self[k] ? self.pool.escape(self[k]) : '\'\'';
         });
         console.log(sqlStr);
         console.log(sql);
@@ -148,15 +148,16 @@ class Dao {
     /**
      * 插入数据
      * @param cb
+     * @param sql
      */
-    insert(cb) {
+    insert(cb,sql = this.sql.insert) {
         this.pool.getConnection((err, conn) => {
             if (err) {
                 console.error(err);
                 cb(ERR_BUSY);
                 return;
             }
-            conn.query(this.parseSql(this.sql.insert), function (err, result) {
+            conn.query(this.parseSql(sql), function (err, result) {
                 conn.release();
                 if (err) {
                     console.error(err);
@@ -175,15 +176,16 @@ class Dao {
     /**
      * 删除数据
      * @param cb
+     * @param sql
      */
-    delete(cb) {
+    delete(cb, sql = this.sql.delete) {
         this.pool.getConnection((err, conn) => {
             if (err) {
                 console.error(err);
                 cb(ERR_BUSY);
                 return;
             }
-            conn.query(this.parseSql(this.sql.delete), function (err, result) {
+            conn.query(this.parseSql(sql), function (err, result) {
                 conn.release();
                 if (err) {
                     console.error(err);
@@ -202,15 +204,16 @@ class Dao {
     /**
      * 更新数据
      * @param cb 回调，成功返回
+     * @param sql
      */
-    update(cb) {
+    update(cb, sql = this.sql.update) {
         this.pool.getConnection((err, conn) => {
             if (err) {
                 console.error(err);
                 cb(ERR_BUSY);
                 return;
             }
-            conn.query(this.parseSql(this.sql.update), function (err, result) {
+            conn.query(this.parseSql(sql), function (err, result) {
                 conn.release();
                 if (err) {
                     console.error(err);
@@ -227,81 +230,12 @@ class Dao {
     }
 
     /**
-     * 根据id查询数据
-     * @param cb 回调，返回记录或undefined
+     * 条件查询
+     * 非空字段作为查询条件，支持分页
+     * @param cb
+     * @param sql
      */
-    queryById(cb) {
-        this.pool.getConnection((err, conn) => {
-            if (err) {
-                console.error(err);
-                cb(ERR_BUSY);
-                return;
-            }
-            conn.query(this.parseSql(this.sql.queryById), function (err, rows) {
-                conn.release();
-                if (err) {
-                    console.error(err);
-                    cb(ERR_BUSY);
-                    return;
-                }
-                if (rows && rows.length > 0) {
-                    cb(null, rows[0]);
-                } else {
-                    cb();
-                }
-            });
-        })
-    }
-
-    /**
-     * 查询全部数据
-     * @param cb 回调，返回记录列表及记录条数
-     */
-    queryAll(cb) {
-        var self = this;
-        self.pool.getConnection((err, conn) => {
-            if (err) {
-                console.error(err);
-                cb(ERR_BUSY);
-                return;
-            }
-            // 查询记录条数
-            conn.query(self.parseCountSql(self.sql.queryAll), function (err, rows) {
-                if (err) {
-                    conn.release();
-                    console.error(err);
-                    cb(ERR_BUSY);
-                    return;
-                }
-                let total = 0;
-                if (rows && rows.length > 0 && rows[0].total) {
-                    total = rows[0].total;
-                }
-                // 如果记录条数为0，不做列表查询
-                if (total == 0) {
-                    conn.release();
-                    cb(null, [], total);
-                    return;
-                }
-                // 查询数据
-                conn.query(self.parseSql(self.sql.queryAll), function (err, rows) {
-                    conn.release();
-                    if (err) {
-                        console.error(err);
-                        cb(ERR_BUSY);
-                        return;
-                    }
-                    if (rows && rows.length > 0) {
-                        cb(null, rows, total);
-                    } else {
-                        cb(null, [], total);
-                    }
-                });
-            });
-        })
-    }
-
-    query(cb) {
+    query(cb, sql = this.sql.query) {
         let self = this;
         self.pool.getConnection((err, conn) => {
             if (err) {
@@ -310,7 +244,7 @@ class Dao {
                 return;
             }
             // 查询记录条数
-            conn.query(self.parseCountSql(self.sql.query), function (err, rows) {
+            conn.query(self.parseCountSql(sql), function (err, rows) {
                 if (err) {
                     conn.release();
                     console.error(err);
@@ -328,7 +262,7 @@ class Dao {
                     return;
                 }
                 // 查询数据
-                conn.query(self.parseSql(self.sql.query), function (err, rows) {
+                conn.query(self.parseSql(sql), function (err, rows) {
                     conn.release();
                     if (err) {
                         console.error(err);

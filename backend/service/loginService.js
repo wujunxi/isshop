@@ -10,9 +10,6 @@ client.on("error", function (err) {
 });
 
 class LoginService {
-    constructor() {
-
-    }
 
     /**
      * MD5加密密码
@@ -37,7 +34,7 @@ class LoginService {
      * @param obj
      * @param cb
      */
-    register(obj,cb){
+    register(obj, cb) {
         let self = this;
         let userDao = new UserDao(obj);
         // 校验入参
@@ -47,8 +44,12 @@ class LoginService {
             return;
         }
         // 检查用户是否存在
-        userDao.queryByLoginID(function (userObj) {
-            if (userObj) {
+        userDao.queryByLoginID(function (err, list, total) {
+            if (err) {
+                cb(err);
+                return;
+            }
+            if (total > 0) {
                 cb('用户已存在');
                 return;
             }
@@ -80,21 +81,66 @@ class LoginService {
                 return;
             }
             // 检查用户是否存在
-            userDao.queryByLoginID(function (userObj) {
-                if (!userObj) {
+            userDao.queryByLoginID(function (err, list, total) {
+                if (err) {
+                    cb(err);
+                    return;
+                }
+                if (total == 0) {
                     cb('用户不存在');
                     return;
                 }
-                let md5Pwd = self.md5Pwd(userDao.login_pwd, userObj.md5_key);
-                if (userObj.login_pwd != md5Pwd) {
+                let row = list[0];
+                let md5Pwd = self.md5Pwd(userDao.login_pwd, row.md5_key);
+                if (row.login_pwd != md5Pwd) {
                     // 错误次数加一
                     client.set(userDao.login_id, ++v);
                     cb('密码有误');
                     return;
                 }
-                cb(null,userObj);
+                cb(null, row);
             });
         });
+    }
+
+    changePwd(obj, cb) {
+        let self = this;
+        if (!obj.new_login_pwd) {
+            cb('新密码不能为空');
+            return;
+        }
+        let userDao = new UserDao(obj);
+        let result = userDao.check(['uid', 'login_pwd']);
+        if (result !== true) {
+            cb(result);
+            return;
+        }
+        // 检查用户是否存在
+        userDao.queryByID(function (err, list, total) {
+            if (err) {
+                cb(err);
+                return;
+            }
+            if (total == 0) {
+                cb('用户不存在');
+                return;
+            }
+            let row = list[0];
+            // 检查密码是否正确
+            let md5Pwd = self.md5Pwd(userDao.login_pwd, row.md5_key);
+            if (row.login_pwd != md5Pwd) {
+                cb('密码有误');
+                return;
+            }
+            // 更新密码
+            userDao.login_pwd = self.md5Pwd(obj.new_login_pwd, row.md5_key);
+            userDao.updateLoginPwd(cb);
+        });
+
+    }
+
+    constructor() {
+
     }
 }
 
