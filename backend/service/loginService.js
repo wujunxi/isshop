@@ -7,6 +7,7 @@ let $conf = require('../conf');
 
 client.on("error", function (err) {
     console.error("Redis Error :" + err);
+    client.quit();
 });
 
 class LoginService {
